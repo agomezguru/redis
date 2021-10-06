@@ -6,7 +6,7 @@ Configured redis server for deploy Drupal 8.x and 9.x based projects
 [agomezguru](https://github.com/agomezguru)
 
 - **Where to get help**:  
-[Docker Official Images: php](https://hub.docker.com/_/redis/)
+[Docker Official Images: redis](https://hub.docker.com/_/redis/)
 
 ## Supported tags and respective `Dockerfile` links
 
