@@ -9,7 +9,7 @@
 # Last updated: 6/10/2021 14:29
 
 # Use an official Redis runtime as a parent image.
-FROM redis
+FROM redis:latest
 
 LABEL maintainer "Alejandro Gomez Lagunas <alagunas@coati.com.mx>"
 
