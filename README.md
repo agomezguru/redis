@@ -1,6 +1,6 @@
 # Quick reference, Redis
 
-Configured redis server for deploy Drupal 8.x and 9.x based projects
+Configured redis server for deploy Drupal 10.x and 11.x based projects
 
 - **Maintained by**:
 [agomezguru](https://github.com/agomezguru)
@@ -18,8 +18,6 @@ The intent of this image is always being together use with a NGINX docker contai
 
 ```bash
 cat <<EOF > docker-compose.yml
-version: '3'
-
 volumes:
   my-public:
     external: true
@@ -28,50 +26,44 @@ volumes:
 
 services:
   web:
-    image: agomezguru/nginx:laravel-5x
+    image: nginx:latest
     ports:
-      - "$outsidePort:80"
-    environment:
-      - HOST_NAME=myAppHostName
-      - LOG_STATUS=on
-      - LOG_NAME=myAppLogName
-      - DEPLOYMENT_STAGE=develop
-      - PHP_CONTAINER_NAME=php
+      - "80:8080"
     volumes:
       - ../someCode:/srv
       - my-public:/srv/public
     networks:
-      - $env-network
+      - production-network
 
   php:
-    image: agomezguru/drupal:9.x-php7.4.23
+    image: agomezguru/drupal:10.x-php8.3.8im
     volumes:
       - ../someCode:/srv
       - my-public:/srv/public
       - ./php-composer.ini:/usr/local/etc/php/conf.d/custom.ini
     networks:
-      - $env-network
+      - production-network
 
   redis:
     image: agomezguru/redis:latest
     networks:
-      - $env-network
+      - production-network
 
   db:
-    image: percona:5.7.35
+    image: percona:8.0.34-26
     volumes:
       - my-db-data:/var/lib/mysql
       - ../percona/masterdb/config:/etc/mysql/conf.d
-      - ../dumps:/backups-db
+      - ../percona/dumps:/backups-db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: $envPassword
+      MYSQL_ROOT_PASSWORD: $environmentPassword
     networks:
-      - $env-network
+      - production-network
 
 # Isolate docker containers arrays between environments.
 networks:
-  $env-network:
+  production-network:
     driver: bridge
 EOF
 ```
